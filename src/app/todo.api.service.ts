@@ -1,37 +1,31 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from "rxjs";
-import { TodoModel } from './todo.model';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from "rxjs";
+import { TodoModel } from './models/todo.model';
+import { ResponseModel } from './models/response.model';
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class TodoApiService {
-    
-    baseURL: string = "http://localhost:3000/";
+    baseURL: string = "http://localhost:3010";
     http: HttpClient;
 
     constructor(http: HttpClient) {
-        this.http = http;    
+      this.http = http;    
     }
 
     getTodos() : Observable<TodoModel[]> {
-        return this.http.get<TodoModel[]>(this.baseURL + "todo")
-        //.pipe(catchError(this.errorHandler));
+      return this.http.get<TodoModel[]>(`${this.baseURL}/todo`);
     }
 
-    private errorHandler(error: HttpErrorResponse) {
-        if (error.error instanceof ErrorEvent) {
-          // A client-side or network error occurred. Handle it accordingly.
-          console.error('An error occurred:', error.error.message);
-        } else {
-          // The backend returned an unsuccessful response code.
-          // The response body may contain clues as to what went wrong,
-          console.error(
-            `Backend returned code ${error.status}, ` +
-            `body was: ${error.error}`);
-        }
-        // return an observable with a user-facing error message
-        return throwError(
-          'Something bad happened; please try again later.');
-      }
+    update(id: number, completed: boolean) : Observable<ResponseModel> {
+      return this.http.put<ResponseModel>(`${this.baseURL}/todo/${id}`, { completed: completed })
+    }
+
+    create(description: string) : Observable<ResponseModel> {
+      return this.http.post<ResponseModel>(`${this.baseURL}/todo`, { description: description })
+    }
+
+    delete(id: number) {
+      return this.http.delete<ResponseModel>(`${this.baseURL}/todo/${id}`)
+    }
 }
