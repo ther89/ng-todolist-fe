@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
       })
   }
 
-  delete(id: number, index: number) {
+  delete(id: string, index: number) {
     this.todoApiService.delete(id)
       .subscribe((data: ResponseModel) => {
         if(data.success) {
@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
       .subscribe((data: ResponseModel) => {
         if(data.success) {
           const todo : TodoModel = {
-            id: parseInt(data.payload),
+            id: data.payload,
             description: this.addTodoDescription,
             completed: false,
           };

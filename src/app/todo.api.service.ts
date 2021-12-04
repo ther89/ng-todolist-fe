@@ -17,7 +17,7 @@ export class TodoApiService {
       return this.http.get<TodoModel[]>(`${this.baseURL}/todo`);
     }
 
-    update(id: number, completed: boolean) : Observable<ResponseModel> {
+    update(id: string, completed: boolean) : Observable<ResponseModel> {
       return this.http.put<ResponseModel>(`${this.baseURL}/todo/${id}`, { completed: completed })
     }
 
@@ -25,7 +25,7 @@ export class TodoApiService {
       return this.http.post<ResponseModel>(`${this.baseURL}/todo`, { description: description })
     }
 
-    delete(id: number) {
+    delete(id: string) {
       return this.http.delete<ResponseModel>(`${this.baseURL}/todo/${id}`)
     }
 }
